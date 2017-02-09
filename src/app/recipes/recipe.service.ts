@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 
 import 'rxjs/Rx';
@@ -9,6 +9,7 @@ import { Ingredient } from '../shared/ingredient';
 @Injectable()
 export class RecipeService {
 
+  recipesChanged = new EventEmitter<Recipe[]>();
   private recipes: Recipe[] = [
     new Recipe('Dummy 1', 'Dummy 1', 'https://www.iconexperience.com/_img/g_collection_png/standard/256x256/crash_test_dummy.png', [new Ingredient('French Fries', 2), new Ingredient('Pork Meat', 1)]),
     new Recipe('Dummy 2', 'Dummy 2', 'https://www.iconexperience.com/_img/g_collection_png/standard/256x256/crash_test_dummy.png', []),
@@ -51,6 +52,7 @@ export class RecipeService {
       .subscribe(
         (data: Recipe[]) => {
           this.recipes = data;
+          this.recipesChanged.emit(this.recipes);
         }
       );
   }
